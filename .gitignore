@@ -1,0 +1,19 @@
+node_modules/
+dist/
+.netlify/
+.env
+.env.*
+!.env.example
+
+# 운영 원본과 출력 템플릿은 공개 저장소에 포함하지 않는다.
+archive/
+work/
+*.hwp
+*.hwpx
+
+# 도구/OS 산출물
+.DS_Store
+Thumbs.db
+*.log
+coverage/
+
