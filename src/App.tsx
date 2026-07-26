@@ -32,6 +32,7 @@ export default function App() {
     const submittedAt = new Date().toISOString();
     await saveSubmission({
       ...submission,
+      savedAt: submittedAt,
       submittedAt,
       status: statusAfterSubmission(submittedAt, activeRound.deadline),
       audit: [
@@ -60,7 +61,7 @@ export default function App() {
     <AppShell role={role} onRoleChange={setRole} onReset={resetDemo}>
       {role === "submitter" ? (
         <SubmitterDashboard
-          key={`${submitterSubmission.id}-${submitterSubmission.savedAt}`}
+          key={`${submitterSubmission.id}-${submitterSubmission.savedAt}-${submitterSubmission.status}`}
           submission={submitterSubmission}
           deadline={activeRound.deadline}
           onSave={saveSubmission}
@@ -76,4 +77,3 @@ export default function App() {
     </AppShell>
   );
 }
-

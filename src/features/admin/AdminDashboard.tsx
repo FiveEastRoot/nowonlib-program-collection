@@ -295,6 +295,7 @@ export function AdminDashboard({
             <small>2026년 8월 10일 수합</small>
             <strong>노원구립도서관</strong>
             <b>주요 업무 현황 보고</b>
+            <div className="document-image-placeholder">이미지 삽입 영역</div>
             <span>2026. 8.</span>
           </div>
           <div className="output-options">
@@ -317,11 +318,11 @@ export function AdminDashboard({
           </button>
           <p className="output-note">
             <AlertTriangle size={14} />
-            운영 템플릿 저장소 연결 후 실제 파일이 생성됩니다.
+            이미지 제외 HWPX를 생성한 뒤 검토자가 Drive 사진을 직접
+            삽입합니다.
           </p>
         </aside>
       </div>
     </section>
   );
 }
-

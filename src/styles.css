@@ -398,7 +398,7 @@ p {
 .program-table__head,
 .program-row {
   display: grid;
-  grid-template-columns: 60px 1.35fr 1.25fr 0.9fr 0.9fr 0.8fr 32px;
+  grid-template-columns: 60px 1.35fr 1.25fr 0.9fr 0.9fr 32px;
   align-items: center;
   min-width: 980px;
 }
@@ -472,8 +472,7 @@ p {
   gap: 6px;
 }
 
-.field > span,
-.image-field > span {
+.field > span {
   color: var(--navy-950);
   font-size: 13px;
   font-weight: 750;
@@ -482,7 +481,6 @@ p {
 .field input,
 .field select,
 .field textarea,
-.image-field select,
 .selector,
 .search-field {
   min-width: 0;
@@ -496,8 +494,7 @@ p {
 
 .field input,
 .field select,
-.field textarea,
-.image-field select {
+.field textarea {
   width: 100%;
   padding: 9px 12px;
 }
@@ -509,43 +506,35 @@ p {
 
 .field input:disabled,
 .field select:disabled,
-.field textarea:disabled,
-.image-field select:disabled {
+.field textarea:disabled {
   color: var(--slate-500);
   background: var(--slate-100);
 }
 
-.image-field {
-  display: grid;
-  grid-template-columns: 110px minmax(0, 1fr);
+.drive-photo-notice {
+  display: flex;
   align-items: center;
-  gap: 12px;
+  gap: 11px;
+  margin: 14px 34px 0;
+  padding: 12px 14px;
+  border: 1px solid #b9ddd8;
+  border-radius: 7px;
+  color: #0f5f58;
+  background: #f1fbf9;
 }
 
-.image-field__control {
+.drive-photo-notice div {
   display: grid;
-  grid-template-columns: auto 1fr 180px;
-  align-items: center;
-  gap: 13px;
-  min-height: 72px;
-  padding: 12px 16px;
-  border: 1px dashed var(--slate-300);
-  border-radius: 6px;
-  background: var(--slate-100);
-  color: var(--slate-700);
+  gap: 2px;
 }
 
-.image-field__control div {
-  display: grid;
-  gap: 4px;
-}
-
-.image-field__control strong {
+.drive-photo-notice strong {
   font-size: 13px;
 }
 
-.image-field__control small {
-  color: var(--slate-500);
+.drive-photo-notice span {
+  color: var(--slate-600);
+  font-size: 12px;
 }
 
 .sticky-actionbar {
@@ -906,6 +895,18 @@ p {
   font-size: 10px;
 }
 
+.document-image-placeholder {
+  width: 72%;
+  min-height: 86px;
+  display: grid;
+  place-items: center;
+  margin-top: 18px;
+  border: 1px dashed var(--slate-300);
+  color: var(--slate-500);
+  background: var(--slate-100);
+  font-size: 10px;
+}
+
 .output-options {
   display: grid;
   gap: 10px;
@@ -1041,6 +1042,11 @@ p {
     padding-left: 16px;
   }
 
+  .drive-photo-notice {
+    margin-right: 16px;
+    margin-left: 16px;
+  }
+
   .program-editor {
     margin: 0 16px;
   }
@@ -1050,17 +1056,8 @@ p {
   }
 
   .form-row,
-  .field,
-  .image-field {
+  .field {
     grid-template-columns: 1fr;
-  }
-
-  .image-field__control {
-    grid-template-columns: auto 1fr;
-  }
-
-  .image-field__control select {
-    grid-column: 1 / -1;
   }
 
   .sticky-actionbar {

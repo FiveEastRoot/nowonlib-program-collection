@@ -4,7 +4,7 @@ import {
   ChevronDown,
   ChevronUp,
   Clock3,
-  ImagePlus,
+  FolderOpen,
   LockKeyhole,
   Plus,
   Save,
@@ -36,7 +36,6 @@ function blankProgram(index: number): Program {
     audience: "",
     capacity: null,
     description: "",
-    imageStatus: "missing",
     included: true,
     outputOrder: index,
     warnings: ["필수 입력항목을 확인해주세요."],
@@ -114,6 +113,14 @@ export function SubmitterDashboard({
         </div>
       ) : null}
 
+      <div className="drive-photo-notice">
+        <FolderOpen size={19} />
+        <div>
+          <strong>사진은 Google Drive로 별도 제출합니다.</strong>
+          <span>이 화면에서는 문서에 들어갈 텍스트 자료만 입력해주세요.</span>
+        </div>
+      </div>
+
       <div className="workspace-toolbar">
         <button className="button button--outline" onClick={addProgram}>
           <Plus size={18} />
@@ -130,7 +137,6 @@ export function SubmitterDashboard({
             <span>일시</span>
             <span>장소</span>
             <span>대상</span>
-            <span>이미지 상태</span>
             <span />
           </div>
           {draft.programs.map((program, index) => {
@@ -151,19 +157,6 @@ export function SubmitterDashboard({
                 <span>
                   {program.audience || "미입력"}
                   {program.capacity ? ` / ${program.capacity}명` : ""}
-                </span>
-                <span
-                  className={
-                    program.imageStatus === "missing" ? "text-error" : ""
-                  }
-                >
-                  {program.imageStatus === "attached"
-                    ? "등록 완료"
-                    : program.imageStatus === "planned"
-                      ? "제작예정"
-                      : program.imageStatus === "not_applicable"
-                        ? "해당 없음"
-                        : "미등록"}
                 </span>
                 <span>{open ? <ChevronUp /> : <ChevronDown />}</span>
               </button>
@@ -282,35 +275,6 @@ export function SubmitterDashboard({
                 }
               />
             </label>
-            <div className="image-field">
-              <span>이미지 상태 *</span>
-              <div className="image-field__control">
-                <ImagePlus size={28} />
-                <div>
-                  <strong>이미지를 업로드하세요.</strong>
-                  <small>JPG, PNG 파일 / 5MB 이하</small>
-                </div>
-                <select
-                  aria-label="이미지 상태"
-                  value={selected.imageStatus}
-                  disabled={!editable}
-                  onChange={(event) =>
-                    updateProgram({
-                      imageStatus: event.target.value as Program["imageStatus"],
-                      warnings:
-                        event.target.value === "missing"
-                          ? ["이미지 상태를 확인해주세요."]
-                          : [],
-                    })
-                  }
-                >
-                  <option value="attached">첨부 완료</option>
-                  <option value="planned">제작예정</option>
-                  <option value="missing">미첨부</option>
-                  <option value="not_applicable">해당 없음</option>
-                </select>
-              </div>
-            </div>
           </div>
         ) : null}
       </div>
@@ -326,7 +290,7 @@ export function SubmitterDashboard({
             </strong>
             <span>
               {warningCount
-                ? "이미지 상태와 필수항목을 확인해주세요."
+                ? "필수항목을 확인해주세요."
                 : "입력한 내용을 최종 확인해주세요."}
             </span>
           </div>

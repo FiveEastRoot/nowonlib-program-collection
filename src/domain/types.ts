@@ -20,12 +20,6 @@ export type SubmissionStatus =
   | "resubmitted"
   | "reviewed";
 
-export type ImageStatus =
-  | "attached"
-  | "planned"
-  | "missing"
-  | "not_applicable";
-
 export interface Library {
   id: LibraryId;
   officialName: string;
@@ -47,7 +41,6 @@ export interface Program {
   audience: string;
   capacity: number | null;
   description: string;
-  imageStatus: ImageStatus;
   included: boolean;
   outputOrder: number;
   warnings: string[];
@@ -85,4 +78,3 @@ export interface AppSnapshot {
   version: 1;
   submissions: Submission[];
 }
-
