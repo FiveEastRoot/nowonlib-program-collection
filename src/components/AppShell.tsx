@@ -1,42 +1,62 @@
 import {
   CalendarDays,
-  ChevronDown,
   CircleHelp,
   ClipboardList,
   FileClock,
   LayoutDashboard,
   LibraryBig,
-  Printer,
-  RotateCcw,
+  LogOut,
+  RefreshCw,
   Settings,
 } from "lucide-react";
 import type { ReactNode } from "react";
-import type { Role } from "../domain/types";
+import type { CollectionType, Role } from "../domain/types";
 
 interface AppShellProps {
   role: Role;
-  onRoleChange: (role: Role) => void;
-  onReset: () => void;
+  accountName: string;
+  busy: boolean;
+  roundType: CollectionType;
+  adminView: AdminView;
+  onLogout: () => void;
+  onRefresh: () => void;
+  onRoundTypeChange: (type: CollectionType) => void;
+  onAdminViewChange: (view: AdminView) => void;
   children: ReactNode;
 }
 
+export type AdminView =
+  | "dashboard"
+  | "collection"
+  | "history"
+  | "submission-history"
+  | "settings"
+  | "help";
+
 export function AppShell({
   role,
-  onRoleChange,
-  onReset,
+  accountName,
+  busy,
+  roundType,
+  adminView,
+  onLogout,
+  onRefresh,
+  onRoundTypeChange,
+  onAdminViewChange,
   children,
 }: AppShellProps) {
   const submitterItems = [
-    { label: "10일 수합", icon: CalendarDays, active: true },
-    { label: "20일 수합", icon: CalendarDays },
-    { label: "제출 내역", icon: ClipboardList },
+    { label: "통합 수합", icon: CalendarDays, roundType: "monthly" as const },
+    {
+      label: "제출 내역",
+      icon: ClipboardList,
+      view: "submission-history" as const,
+    },
   ];
   const adminItems = [
-    { label: "대시보드", icon: LayoutDashboard },
-    { label: "10일 수합", icon: CalendarDays, active: true },
-    { label: "20일 수합", icon: CalendarDays },
-    { label: "출력 작업", icon: Printer },
-    { label: "설정", icon: Settings },
+    { label: "대시보드", icon: LayoutDashboard, view: "dashboard" as const },
+    { label: "통합 수합", icon: CalendarDays, roundType: "monthly" as const },
+    { label: "설정", icon: Settings, view: "settings" as const },
   ];
   const items = role === "submitter" ? submitterItems : adminItems;
 
@@ -52,26 +72,24 @@ export function AppShell({
           <span className="brand__product">문화프로그램 통합 수합</span>
         </div>
         <div className="topbar__tools">
-          <div className="role-preview" aria-label="개발 미리보기 역할">
-            <button
-              className={role === "submitter" ? "is-active" : ""}
-              onClick={() => onRoleChange("submitter")}
-            >
-              제출자
-            </button>
-            <button
-              className={role === "admin" ? "is-active" : ""}
-              onClick={() => onRoleChange("admin")}
-            >
-              관리자
-            </button>
-          </div>
-          <button className="icon-button" onClick={onReset} title="데모 초기화">
-            <RotateCcw size={18} />
+          <button
+            className="icon-button"
+            disabled={busy}
+            onClick={onRefresh}
+            title="운영 데이터 새로고침"
+          >
+            <RefreshCw size={18} />
           </button>
-          <button className="account-button">
-            <span>{role === "submitter" ? "노원중앙도서관" : "수합 관리자"}</span>
-            <ChevronDown size={16} />
+          <div className="account-button" aria-label={`현재 계정 ${accountName}`}>
+            <span>{accountName}</span>
+          </div>
+          <button
+            className="icon-button"
+            disabled={busy}
+            onClick={onLogout}
+            title="로그아웃"
+          >
+            <LogOut size={18} />
           </button>
         </div>
       </header>
@@ -80,10 +98,33 @@ export function AppShell({
           <nav aria-label="주요 메뉴">
             {items.map((item) => {
               const Icon = item.icon;
+              const itemRoundType = "roundType" in item ? item.roundType : null;
+              const itemView =
+                "view" in item ? (item.view as AdminView) : null;
+              const active =
+                (itemRoundType === roundType && adminView === "collection") ||
+                itemView === adminView;
               return (
                 <button
                   key={item.label}
-                  className={`nav-item ${item.active ? "is-active" : ""}`}
+                  aria-current={active ? "page" : undefined}
+                  className={`nav-item ${active ? "is-active" : ""}`}
+                  disabled={!itemRoundType && !itemView}
+                  onClick={() => {
+                    if (itemRoundType) {
+                      onRoundTypeChange(itemRoundType);
+                      onAdminViewChange("collection");
+                    } else if (itemView) {
+                      onAdminViewChange(itemView);
+                    }
+                  }}
+                  title={
+                    itemRoundType || itemView
+                      ? active
+                        ? "현재 화면입니다."
+                        : `${item.label} 화면으로 전환합니다.`
+                      : "준비 중인 메뉴입니다."
+                  }
                 >
                   <Icon size={19} />
                   <span>{item.label}</span>
@@ -91,7 +132,26 @@ export function AppShell({
               );
             })}
           </nav>
-          <button className="nav-item sidebar__help">
+          <button
+            aria-current={
+              adminView === (role === "admin" ? "history" : "help")
+                ? "page"
+                : undefined
+            }
+            className={`nav-item sidebar__help ${
+              adminView === (role === "admin" ? "history" : "help")
+                ? "is-active"
+                : ""
+            }`}
+            onClick={() =>
+              onAdminViewChange(role === "admin" ? "history" : "help")
+            }
+            title={
+              role === "admin"
+                ? "생성 파일과 작업 기록을 확인합니다."
+                : "수합 작성과 제출 방법을 확인합니다."
+            }
+          >
             {role === "submitter" ? (
               <CircleHelp size={19} />
             ) : (
@@ -105,4 +165,3 @@ export function AppShell({
     </div>
   );
 }
-

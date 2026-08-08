@@ -1,4 +1,4 @@
-import type { SubmissionStatus } from "./types";
+import type { CollectionStatus, SubmissionStatus } from "./types";
 
 export function statusAfterSubmission(
   submittedAt: string,
@@ -9,12 +9,16 @@ export function statusAfterSubmission(
     : "submitted";
 }
 
-export function canSubmitterEdit(status: SubmissionStatus): boolean {
-  return (
-    status === "draft" ||
-    status === "revision_requested" ||
-    status === "resubmitted"
-  );
+export function canSubmitterEdit(
+  status: SubmissionStatus,
+  collectionStatus: CollectionStatus = "open",
+  deadline?: string,
+  now = Date.now(),
+): boolean {
+  if (collectionStatus !== "open") return false;
+  if (["draft", "revision_requested"].includes(status)) return true;
+  if (!["submitted", "resubmitted"].includes(status) || !deadline) return false;
+  return now <= new Date(deadline).getTime();
 }
 
 export function formatDeadline(deadline: string): string {
@@ -26,4 +30,3 @@ export function formatDeadline(deadline: string): string {
     hour12: false,
   }).format(new Date(deadline));
 }
-

@@ -1,6 +1,7 @@
 node_modules/
 dist/
 .netlify/
+.clasp*.json
 .env
 .env.*
 !.env.example
@@ -16,4 +17,4 @@ work/
 Thumbs.db
 *.log
 coverage/
-
+outputs/
