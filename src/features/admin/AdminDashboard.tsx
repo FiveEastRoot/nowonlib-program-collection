@@ -215,6 +215,16 @@ export function AdminDashboard({
       ),
     [rounds],
   );
+  const unifiedTargetMonths = useMemo(
+    () => [
+      ...new Set(
+        rounds
+          .filter((item) => item.type === "monthly")
+          .map((item) => item.targetMonth),
+      ),
+    ],
+    [rounds],
+  );
   const documentRound = round;
   const recentAudit = auditLog
     .filter(
@@ -398,7 +408,7 @@ export function AdminDashboard({
   }
 
   async function createMonth() {
-    if (busy || targetMonths.includes(newTargetMonth)) return;
+    if (busy || unifiedTargetMonths.includes(newTargetMonth)) return;
     if (await onCreateCollectionMonth(newTargetMonth)) {
       setShowMonthDialog(false);
       setNewTargetMonth(nextTargetMonth(newTargetMonth));
@@ -1613,10 +1623,10 @@ export function AdminDashboard({
               />
             </label>
             <p className="revision-dialog__notice">
-              선택한 월의 10일·20일 회차와 9개관 제출함을 준비합니다. 자동으로
-              열지 않으며, 준비 후 각 회차의 `수합 열기`를 눌러 개방합니다.
+              선택한 월의 통합 수합 회차와 9개관 제출함을 준비합니다. 자동으로
+              열지 않으며, 준비 후 `수합 열기`를 눌러 개방합니다.
             </p>
-            {targetMonths.includes(newTargetMonth) ? (
+            {unifiedTargetMonths.includes(newTargetMonth) ? (
               <p className="revision-dialog__notice text-error" role="status">
                 이미 준비된 대상 월입니다.
               </p>
@@ -1635,13 +1645,13 @@ export function AdminDashboard({
                 disabled={
                   busy ||
                   !/^\d{4}-\d{2}$/.test(newTargetMonth) ||
-                  targetMonths.includes(newTargetMonth)
+                  unifiedTargetMonths.includes(newTargetMonth)
                 }
                 onClick={() => void createMonth()}
                 type="button"
               >
                 <FilePlus2 size={16} />
-                {busy ? "준비 중…" : "10일·20일 회차 준비"}
+                {busy ? "준비 중…" : "통합 수합 회차 준비"}
               </button>
             </div>
           </section>

@@ -105,10 +105,11 @@ export default function App() {
         );
       return (
         matchingRounds.find((round) => round.targetMonth === targetMonth) ??
-        matchingRounds[0]
+        matchingRounds[0] ??
+        (session?.role === "admin" ? snapshot?.rounds[0] : undefined)
       );
     },
-    [roundType, snapshot, targetMonth],
+    [roundType, session?.role, snapshot, targetMonth],
   );
   const submitterSubmission = useMemo(
     () =>
