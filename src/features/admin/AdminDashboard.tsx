@@ -210,10 +210,14 @@ export function AdminDashboard({
   );
   const targetMonths = useMemo(
     () =>
-      [...new Set(rounds.map((item) => item.targetMonth))].sort((left, right) =>
-        right.localeCompare(left),
-      ),
-    [rounds],
+      [
+        ...new Set(
+          rounds
+            .filter((item) => item.type === round.type)
+            .map((item) => item.targetMonth),
+        ),
+      ].sort((left, right) => right.localeCompare(left)),
+    [round.type, rounds],
   );
   const unifiedTargetMonths = useMemo(
     () => [
