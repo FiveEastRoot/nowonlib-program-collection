@@ -1620,8 +1620,11 @@ export function AdminDashboard({
               <input
                 autoFocus
                 disabled={busy}
+                inputMode="numeric"
                 onChange={(event) => setNewTargetMonth(event.target.value)}
-                type="month"
+                pattern="\d{4}-\d{2}"
+                placeholder="YYYY-MM"
+                type="text"
                 value={newTargetMonth}
               />
             </label>
