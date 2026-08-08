@@ -1065,12 +1065,38 @@ describe("Apps Script submission API", () => {
     });
   });
 
-  it("rejects a month already stored by Sheets as a date value", () => {
+  it("allows a unified round beside a legacy round stored as a date value", () => {
     const fixture = createFixture();
     fixture.spreadsheet.sheet("COLLECTIONS").setCell(
       2,
       headers.COLLECTIONS!.indexOf("target_month") + 1,
       "2026-07-31T15:00:00.000Z",
+    );
+
+    const result = dispatchRequest(
+      request(
+        "create_collection_month",
+        { target_month: "2026-08" },
+        { actor: { role: "admin", actor_ref: "account-admin" } },
+      ),
+      fixture.services,
+    );
+
+    expect(result.data).toMatchObject({
+      collection_ids: ["2026-08-monthly"],
+    });
+  });
+
+  it("rejects a month that already has a unified round", () => {
+    const fixture = createFixture();
+    fixture.spreadsheet.sheet("COLLECTIONS").appendRow(
+      rowFor("COLLECTIONS", {
+        collection_id: "2026-08-monthly",
+        target_month: "2026-08",
+        collection_type: "monthly",
+        status: "planned",
+        deadline_at: "2026-08-10T07:00:00.000Z",
+      }),
     );
 
     expect(() =>

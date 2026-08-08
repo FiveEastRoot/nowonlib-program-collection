@@ -619,9 +619,11 @@ function createCollectionMonth_(spreadsheet, request, services) {
 
   var collections = readTable_(spreadsheet, "COLLECTIONS");
   if (collections.rows.some(function (row) {
-    return normalizeTargetMonth_(
-      rowToRecord_(collections.headers, row).target_month
-    ) === targetMonth;
+    var collection = rowToRecord_(collections.headers, row);
+    return (
+      normalizeTargetMonth_(collection.target_month) === targetMonth &&
+      textValue_(collection.collection_type) === "monthly"
+    );
   })) {
     throw apiError_(
       "MONTH_ALREADY_EXISTS",

@@ -105,8 +105,7 @@ export default function App() {
         );
       return (
         matchingRounds.find((round) => round.targetMonth === targetMonth) ??
-        matchingRounds[0] ??
-        snapshot?.rounds[0]
+        matchingRounds[0]
       );
     },
     [roundType, snapshot, targetMonth],
