@@ -8,15 +8,23 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "test": "vitest run",
+    "test:hwpx:external": "tsx scripts/validateHwpxGeneration.ts",
+    "test:hwpx:integration": "tsx scripts/runTestSheetHwpxIntegration.ts",
+    "test:hwpx:july": "tsx scripts/runJulyArchiveHwpxIntegration.ts",
+    "typecheck:functions": "tsc -p tsconfig.netlify.json",
     "preview": "vite preview"
   },
   "dependencies": {
+    "fflate": "^0.8.2",
     "lucide-react": "^1.26.0",
     "react": "^19.1.1",
     "react-dom": "^19.1.1"
   },
   "devDependencies": {
     "@eslint/js": "^10.0.1",
+    "@netlify/functions": "^5.3.0",
+    "@ssabrojs/hwpxjs": "^0.4.0",
+    "@types/node": "^22.20.1",
     "@types/react": "^19.0.3",
     "@types/react-dom": "^19.0.2",
     "@vitejs/plugin-react": "^6.0.4",
@@ -24,6 +32,7 @@
     "eslint-plugin-react-hooks": "^7.1.1",
     "eslint-plugin-react-refresh": "^0.5.3",
     "globals": "^17.7.0",
+    "tsx": "^4.20.6",
     "typescript": "~6.0.2",
     "typescript-eslint": "^8.56.1",
     "vite": "^8.1.5",

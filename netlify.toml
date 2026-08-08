@@ -2,6 +2,11 @@
   command = "npm run build"
   publish = "dist"
 
+[functions]
+  directory = "netlify/functions"
+  node_bundler = "esbuild"
+  included_files = ["netlify/functions/_assets/*.hwpx"]
+
 [[redirects]]
   from = "/*"
   to = "/index.html"
@@ -9,4 +14,3 @@
 
 [build.environment]
   NODE_VERSION = "22"
-
