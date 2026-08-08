@@ -1620,7 +1620,6 @@ export function AdminDashboard({
               <input
                 autoFocus
                 disabled={busy}
-                min={round.targetMonth}
                 onChange={(event) => setNewTargetMonth(event.target.value)}
                 type="month"
                 value={newTargetMonth}
